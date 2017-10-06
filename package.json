@@ -12,8 +12,10 @@
     "bluebird": "^3.5.0",
     "get-port": "^3.2.0",
     "lodash": "^4.17.4",
+    "mongodb": "^2.2.31",
     "mongodb-prebuilt": "^6.3.3",
-    "tmp": "^0.0.33"
+    "tmp": "^0.0.33",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "eslint-config-fanmiles": "^1.2.1"

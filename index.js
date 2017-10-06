@@ -3,6 +3,7 @@ const Promise = require('bluebird');
 const tmp = require('tmp');
 const getPort = require('get-port');
 const { MongodHelper } = require('mongodb-prebuilt');
+const createMongoClient = require('./createMongoClient');
 
 module.exports = Promise.coroutine(function* mongoRunnerHandler(config) {
   const mongodConfig = _.defaults(config, {
@@ -20,5 +21,17 @@ module.exports = Promise.coroutine(function* mongoRunnerHandler(config) {
   ];
 
   const mongodHelper = new MongodHelper(mongodArgs);
-  return yield mongodHelper.run();
+  const mongoIsRunning = yield mongodHelper.run();
+
+  if (!mongoIsRunning) {
+    throw new Error('mongod was not successfully started!');
+  }
+
+  process.on('exit', () => {
+    mongodHelper.mongoBin.childProcess.kill('SIGTERM');
+  });
+
+  return `mongodb://0.0.0.0:${port}`;
 });
+
+module.exports.createMongoClient = createMongoClient;
