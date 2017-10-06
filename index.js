@@ -4,26 +4,21 @@ const tmp = require('tmp');
 const getPort = require('get-port');
 const { MongodHelper } = require('mongodb-prebuilt');
 
-
 module.exports = Promise.coroutine(function* (config) {
   const mongodConfig = _.defaults(config, {
     port: 27017,
     host: '0.0.0.0',
   });
 
-  try {
-    const port = yield getPort({ host: mongodConfig.host });
-    const dbPath = yield tmp.dirAsync();
+  const port = yield getPort({ host: mongodConfig.host });
+  const tempDirectory = tmp.dirSync();
 
-    const mongodArgs = [
-      '--storageEngine', 'ephemeralForTest',
-      '--dbpath', dbPath,
-      '--port', port,
-    ];
+  const mongodArgs = [
+    '--storageEngine', 'ephemeralForTest',
+    '--dbpath', tempDirectory.name,
+    '--port', port,
+  ];
 
-    const mongodHelper = new MongodHelper(mongodArgs);
-    yield mongodHelper.run();
-  } catch(e) {
-    throw e;
-  }
+  const mongodHelper = new MongodHelper(mongodArgs);
+  return yield mongodHelper.run();
 });
