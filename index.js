@@ -4,7 +4,7 @@ const tmp = require('tmp');
 const getPort = require('get-port');
 const { MongodHelper } = require('mongodb-prebuilt');
 
-module.exports = Promise.coroutine(function* (config) {
+module.exports = Promise.coroutine(function* mongoRunnerHandler(config) {
   const mongodConfig = _.defaults(config, {
     port: 27017,
     host: '0.0.0.0',
