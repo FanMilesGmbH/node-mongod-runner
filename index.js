@@ -21,6 +21,11 @@ module.exports = Promise.coroutine(function* mongoRunnerHandler(config) {
   ];
 
   const mongodHelper = new MongodHelper(mongodArgs);
+
+  if(mongodConfig.version) {
+    _.set(mongodHelper, 'mongoBin.mongoDBPrebuilt.mongoDBDownload.options.version', mongodConfig.version);
+  }
+
   const mongoIsRunning = yield mongodHelper.run();
 
   if (!mongoIsRunning) {
