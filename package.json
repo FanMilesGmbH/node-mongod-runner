@@ -1,6 +1,6 @@
 {
   "name": "node-mongod-runner",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Create mongod server to run tests against",
   "main": "index.js",
   "scripts": {
