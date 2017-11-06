@@ -2,8 +2,6 @@ const Promise = require('bluebird');
 const uuidv4 = require('uuid/v4');
 const MongoClient = require('mongodb').MongoClient;
 
-let mongoClient;
-
 /**
  * @typedef {Object} CreateMongoClientResponse
  * @property {String} mongoDbUri
@@ -18,15 +16,11 @@ let mongoClient;
  * @returns {Promise.<CreateMongoClientResponse>}
  */
 module.exports = Promise.coroutine(function* createMongoClientHandler({ connectionUri }) {
-  if (mongoClient) {
-    return mongoClient;
-  }
-
   const dbName = `test-db-${uuidv4()}`;
-  mongoClient = new MongoClient();
+  const Client = new MongoClient();
 
   const mongoDbUri = `${connectionUri}/${dbName}`;
-  mongoClient = yield mongoClient.connect(mongoDbUri);
+  const mongoClient = yield Client.connect(mongoDbUri);
 
   return { mongoDbUri, mongoClient };
 });
