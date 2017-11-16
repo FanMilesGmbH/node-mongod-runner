@@ -1,7 +1,7 @@
 {
   "name": "node-mongod-runner",
-  "version": "1.2.0",
-  "description": "Create mongod server to run tests against",
+  "version": "1.2.1",
+  "description": "Run mongod binary with ephemeralForTest storrage",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
