@@ -34,7 +34,6 @@ module.exports = Promise.coroutine(function* mongoRunnerHandler(config) {
 
   function kill() {
     mongodHelper.mongoBin.childProcess.kill('SIGTERM');
-    process.exit();
   }
 
   process.on('SIGINT', kill);
