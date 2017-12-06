@@ -42,7 +42,7 @@ module.exports = Promise.coroutine(function* mongoRunnerHandler(config) {
   module.exports.kill = kill;
 
   return {
-    mongoUri: `mongodb://0.0.0.0:${port}`,
+    connectionUri: `mongodb://0.0.0.0:${port}`,
     port,
   };
 });
