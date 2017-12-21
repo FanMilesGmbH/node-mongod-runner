@@ -8,8 +8,8 @@ The process will be stopped on `SIGINT` or `SIGTERM` signals.
 const mongodRunner = require('node-mongod-runner');
 const mongodb = require('mongodb');
 
-mongodRunner().then(({ connectionUri }) => {
-  return mongodb.connect(`${connectionUri}/test_db`);
+mongodRunner().then(({ mongoUri }) => {
+  return mongodb.connect(`${mongoUri}/test_db`);
 })
 ```
 
@@ -51,11 +51,11 @@ mongodRunner().then(({ connectionUri }) => {
 
 ## `mongodRunner({ port, host, version })`
 
-Returns a `promise` that will resolve an object containing `connectionUri` and `port`.
+Returns a `promise` that will resolve an object containing `mongoUri` and `port`.
 ```javascript
 // result
 {
-  connectionUri // 'mongodb://0.0.0.0:44444'
+  mongoUri // 'mongodb://0.0.0.0:44444'
   port          // the generated port Eg.: 44444
 }
 ```
@@ -63,12 +63,12 @@ Returns a `promise` that will resolve an object containing `connectionUri` and `
 ## `mongoRunner.createMongoClient({ connectionUri })`
 
 It takes a `connectionUri` and it creates a mongodb connection to a random database.
-It returns a `Promise` that will resolve to an object containing the `connectionUri` that includes
+It returns a `Promise` that will resolve to an object containing the `mongoUri` that includes
 the random generated database name.
 ```javascript
 // result
 {
-  connectionUri // the connection uri with a randomly generated db name Eg.: 'mongodb://0.0.0.0:44444/test-db-a743afc5-1571-486a-b26b-982f40f27c32'
+  mongoDbUri // the mongo uri with a randomly generated db name Eg.: 'mongodb://0.0.0.0:44444/test-db-a743afc5-1571-486a-b26b-982f40f27c32'
   mongoClient   // a mongodb client connection
 }
 ```
