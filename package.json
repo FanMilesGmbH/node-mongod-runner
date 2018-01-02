@@ -4,7 +4,8 @@
   "description": "Run mongod binary with ephemeralForTest storrage",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --opts mocha.opts"
+    "test": "mocha --opts mocha.opts && npm run eslint",
+    "eslint": "eslint ."
   },
   "author": "www.fanmiles.com",
   "license": "ISC",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "eslint": "^4.14.0",
     "eslint-config-fanmiles": "^1.2.1",
     "mocha": "^4.0.1",
     "sinon": "^4.1.3"

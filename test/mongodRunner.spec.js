@@ -37,7 +37,7 @@ describe('startMongod', () => {
         run: sinon.stub().resolves(true),
       });
 
-      startMongod = makeStartMongod({ getPort, tmp, MongodHelper});
+      startMongod = makeStartMongod({ getPort, tmp, MongodHelper });
 
       response = yield startMongod();
     }));
@@ -77,7 +77,7 @@ describe('startMongod', () => {
         run: sinon.stub().resolves(true),
       });
 
-      startMongod = makeStartMongod({ getPort, tmp, MongodHelper});
+      startMongod = makeStartMongod({ getPort, tmp, MongodHelper });
 
       response = yield startMongod({
         port,
