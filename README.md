@@ -1,4 +1,6 @@
 # node-mongod-runner
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/FanMilesGmbH/node-mongod-runner.svg)](https://greenkeeper.io/)
 Nodejs runner for mongod with ephemeralForTest storage type and guaranteed listening port.
 The process will be stopped on `SIGINT` or `SIGTERM` signals.
 
