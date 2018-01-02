@@ -2,94 +2,102 @@ const { expect } = require('chai');
 const { coroutine: async } = require('bluebird');
 const sinon = require('sinon');
 const makeStartMongod = require('../startMongod');
+const makeCreateMongoClient = require('../createMongoClient');
 
-const makeGetPortStub = ({ port, host }) => sinon.stub()
-  .withArgs({
-    host,
-    port,
-  })
-  .resolves(port);
 
 describe('startMongod', () => {
-  context('with defaults', () => {
-    const port = 27017;
-    const host = '0.0.0.0';
-    const tmpDirName = '/tmp/random';
+  [
+    {
+      description: 'with defaults',
+      options: {},
+    },
+    {
+      description: 'with custom options',
+      options: {
+        port: 51678,
+        host: '127.0.0.1',
+      },
+    },
+  ].forEach(({ description, options: { port, host } }) => {
+    context(description, () => {
+      const tmpDirName = '/tmp/random';
+      const expectedPort = port || 27017;
+      const expectedHost = host || '0.0.0.0';
 
-    let startMongod;
-    let response;
+      let startMongod;
+      let response;
 
-    beforeEach(async(function* beforeEachHandler() {
-      const getPort = makeGetPortStub({
-        host,
-        port,
-      });
+      beforeEach(async(function* beforeEachHandler() {
+        const getPort = sinon.stub();
 
-      const tmp = {
-        dirSync: sinon.stub().returns(tmpDirName),
-      };
+        getPort.rejects('getPort() called with incorrect arguments.');
 
-      const MongodHelper = sinon.stub().withArgs([
-        '--storageEngine', 'ephemeralForTest',
-        '--dbpath', tmpDirName,
-        '--port', port,
-      ]).returns({
-        run: sinon.stub().resolves(true),
-      });
+        getPort.withArgs({
+          host: expectedHost,
+          port: expectedPort,
+        })
+          .resolves(expectedPort);
 
-      startMongod = makeStartMongod({ getPort, tmp, MongodHelper });
 
-      response = yield startMongod();
-    }));
+        const tmp = {
+          dirSync: sinon.stub().returns(tmpDirName),
+        };
 
-    it('should have a correct response', () => {
-      expect(response).to.deep.equal({
-        connectionUri: `mongodb://${host}:${port}`,
-        port,
+        const MongodHelper = sinon.stub().withArgs([
+          '--storageEngine', 'ephemeralForTest',
+          '--dbpath', tmpDirName,
+          '--port', port,
+        ]).returns({
+          run: sinon.stub().resolves(true),
+        });
+
+        startMongod = makeStartMongod({ getPort, tmp, MongodHelper });
+
+        response = yield startMongod({ port, host });
+      }));
+
+      it('should have a correct response', () => {
+        expect(response).to.deep.equal({
+          connectionUri: `mongodb://${expectedHost}:${expectedPort}`,
+          port: expectedPort,
+        });
       });
     });
   });
+});
 
-  context('with custom options', () => {
-    const port = 51678;
-    const host = '127.0.0.1';
-    const tmpDirName = '/tmp/random';
+describe('createMongoClient', () => {
+  const connectionUri = 'mongo_connectionUri';
+  const dbName = 'mongo_dbname';
+  const connectCallResult = 'expectedMongoClient';
 
-    let startMongod;
-    let response;
+  let createMongoClient;
+  let result;
 
-    beforeEach(async(function* beforeEachHandler() {
-      const getPort = makeGetPortStub({
-        host,
-        port,
-      });
+  beforeEach(async(function* beforeEachHandler() {
+    const uuidv4 = sinon.stub().returns(dbName);
 
-      const tmp = {
-        dirSync: sinon.stub().returns(tmpDirName),
-      };
+    const connectStub = sinon.stub();
 
-      const MongodHelper = sinon.stub().withArgs([
-        '--storageEngine', 'ephemeralForTest',
-        '--dbpath', tmpDirName,
-        '--bind_ip', host,
-        '--port', port,
-      ]).returns({
-        run: sinon.stub().resolves(true),
-      });
+    connectStub
+      .rejects('MongoClient.connect() called with wrong parameters.');
 
-      startMongod = makeStartMongod({ getPort, tmp, MongodHelper });
+    connectStub
+      .withArgs(`${connectionUri}/test-db-${dbName}`)
+      .resolves(connectCallResult);
 
-      response = yield startMongod({
-        port,
-        host,
-      });
-    }));
+    const MongoClient = sinon.stub().returns({
+      connect: connectStub,
+    });
+    createMongoClient = makeCreateMongoClient({ uuidv4, MongoClient });
 
-    it('should have a correct response', () => {
-      expect(response).to.deep.equal({
-        connectionUri: `mongodb://${host}:${port}`,
-        port,
-      });
+    result = yield createMongoClient({ connectionUri });
+  }));
+
+  it('should return a mongoClient connection', () => {
+    expect(result).to.deep.equal({
+      mongoDbUri: `${connectionUri}/test-db-${dbName}`,
+      mongoClient: connectCallResult,
     });
   });
 });

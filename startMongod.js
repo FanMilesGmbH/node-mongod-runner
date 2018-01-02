@@ -9,7 +9,7 @@ module.exports = ({ tmp, MongodHelper, getPort }) =>
     });
 
     const host = mongodConfig.host;
-    const port = yield getPort({ host });
+    const port = yield getPort({ host, port: mongodConfig.port });
     const tempDirectory = tmp.dirSync();
 
     const mongodArgs = [
