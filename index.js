@@ -1,6 +1,6 @@
 const tmp = require('tmp');
 const getPort = require('get-port');
-const { MongodHelper } = require('mongodb-prebuilt');
+const { MongodHelper } = require('@fanmiles/mongodb-prebuilt');
 const uuidv4 = require('uuid/v4');
 const { MongoClient } = require('mongodb');
 
