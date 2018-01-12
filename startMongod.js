@@ -38,10 +38,9 @@ module.exports = ({ tmp, MongodHelper, getPort }) =>
     process.on('SIGINT', kill);
     process.on('SIGTERM', kill);
 
-    module.exports.kill = kill;
-
     return {
       connectionUri: `mongodb://${host}:${port}`,
       port,
+      kill,
     };
   });
