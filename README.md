@@ -57,6 +57,7 @@ Returns a `promise` that will resolve an object containing `connectionUri` and `
 {
   connectionUri // 'mongodb://0.0.0.0:44444'
   port          // the generated port Eg.: 44444
+  kill          // method to kill mongod process
 }
 ```
 

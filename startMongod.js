@@ -43,5 +43,6 @@ module.exports = ({ tmp, MongodHelper, getPort }) =>
     return {
       connectionUri: `mongodb://${host}:${port}`,
       port,
+      kill,
     };
   });
