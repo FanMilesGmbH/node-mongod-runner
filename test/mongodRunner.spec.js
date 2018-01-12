@@ -57,10 +57,9 @@ describe('startMongod', () => {
       }));
 
       it('should have a correct response', () => {
-        expect(response).to.deep.equal({
-          connectionUri: `mongodb://${expectedHost}:${expectedPort}`,
-          port: expectedPort,
-        });
+        expect(response).to.have.ownProperty('connectionUri', `mongodb://${expectedHost}:${expectedPort}`);
+        expect(response).to.have.ownProperty('port', expectedPort);
+        expect(response).to.have.ownProperty('kill').and.is.a('function');
       });
     });
   });
