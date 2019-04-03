@@ -11,7 +11,7 @@
   "author": "www.fanmiles.com",
   "license": "ISC",
   "dependencies": {
-    "@fanmiles/mongodb-prebuilt": "^6.3.6",
+    "@fanmiles/mongodb-prebuilt": "^6.3.7",
     "bluebird": "^3.5.0",
     "get-port": "^4.0.0",
     "lodash": "^4.17.4",
